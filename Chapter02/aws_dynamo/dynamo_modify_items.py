@@ -17,10 +17,12 @@ This packages inserts records into DynamoDB
 
 """
 from boto3 import resource
-
+import os
+os.environ["HTTP_PROXY"] = "http://proxy-us.intel.com:911"
+os.environ["HTTPS_PROXY"] = "http://proxy-us.intel.com:912"
 
 class DynamoRepository:
-    def __init__(self, target_dynamo_table, region='eu-west-1'):
+    def __init__(self, target_dynamo_table, region='us-east-1'):
         self.dynamodb = resource(service_name='dynamodb', region_name=region)
         self.target_dynamo_table = target_dynamo_table
         self.table = self.dynamodb.Table(self.target_dynamo_table)
@@ -40,7 +42,7 @@ def main():
     # table_name = 'user-visits'
 
     # For SAM deployment
-    table_name = 'user-visits-sam'
+    table_name = 'user-visits'
     dynamo_repo = DynamoRepository(table_name)
     print(dynamo_repo.update_dynamo_event_counter('324', 20171001))
     print(dynamo_repo.update_dynamo_event_counter('324', 20171001, 2))

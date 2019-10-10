@@ -20,12 +20,14 @@ This package creates a new DynamoDb table with the specified read and write capa
 
 """
 import boto3
-
+import os
+os.environ["HTTP_PROXY"] = "http://proxy-us.intel.com:911"
+os.environ["HTTPS_PROXY"] = "http://proxy-us.intel.com:912"
 
 def create_dynamo_table(table_name_value, enable_streams=False,
                         read_capacity=1,
                         write_capacity=1,
-                        region='eu-west-1'):
+                        region='us-east-1'):
     table_name = table_name_value
     print('creating table: ' + table_name)
     try:

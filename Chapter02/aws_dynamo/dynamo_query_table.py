@@ -19,7 +19,9 @@ import json
 
 from boto3 import resource
 from boto3.dynamodb.conditions import Key
-
+import os
+os.environ["HTTP_PROXY"] = "http://proxy-us.intel.com:911"
+os.environ["HTTPS_PROXY"] = "http://proxy-us.intel.com:912"
 
 class DecimalEncoder(json.JSONEncoder):
     """Helper class to convert a DynamoDB item to JSON.
@@ -36,7 +38,7 @@ class DecimalEncoder(json.JSONEncoder):
 class DynamoRepository:
     """abstracts all interactions with DynamoDB including the connection and querying of tables
     """
-    def __init__(self, target_dynamo_table, region='eu-west-1'):
+    def __init__(self, target_dynamo_table, region='us-east-1'):
         self.dynamodb = resource(service_name='dynamodb', region_name=region)
         self.dynamo_table = target_dynamo_table
         self.table = self.dynamodb.Table(self.dynamo_table)
@@ -73,7 +75,7 @@ def main():
     # table_name = 'user-visits'
 
     # For SAM:
-    table_name = 'user-visits-sam'
+    table_name = 'user-visits'
     partition_key = 'EventId'
     partition_value = '324'
     sort_key = 'EventDay'
